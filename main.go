@@ -11,10 +11,10 @@ import (
 
 type (
 	Issue struct {
-		Title string `json:"title"`
-		URL string `json:"url"`
-		Create time.Time `json:"create"`
-		Close time.Time `json:"close"`
+		Title	 string 	`json:"title"`
+		URL		 string 	`json:"url"`
+		Create	 time.Time  `json:"create"`
+		Close 	 time.Time  `json:"close"`
 	}
 	Issues []Issue
 )
@@ -40,7 +40,17 @@ func main() {
 		os.Exit(0)
 	}
 
+	list := map[int]map[int]Issues{}
 	for _, issue := range issues {
-		fmt.Println(issue.Title)
+		list[issue.Close.Year()] = map[int]Issues{}
+	}
+	for _, issue := range issues {
+		list[issue.Close.Year()][int(issue.Close.Month())] = append(list[issue.Close.Year()][int(issue.Close.Month())], issue)
+	}
+
+	for key, months := range list {
+		for month, issues := range months {
+			fmt.Printf("%d,%d,%d\n", key,month,len(issues))
+		}
 	}
 }
