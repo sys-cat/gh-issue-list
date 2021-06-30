@@ -25,4 +25,9 @@ gh pr list -a @me -s closed --json title,url,createdAt,closedAt -L 100 | jq --ar
 
 - Run list issue
 
-`go run main.go -f {$filepath}`
+`go run main.go -f {$filepath} [option]`
+
+### Option
+
+- `-d` : output duration days(rounded down to the nearest whole number).
+    - If this option is set, the displayed data will be in detail mode.

@@ -21,6 +21,7 @@ type (
 
 func main() {
 	filepath := flag.String("f", "", "file path string")
+	due := flag.Bool("d", false, "detail duration per items")
 	flag.Parse()
 	if *filepath == "" {
 		fmt.Println("-f is required")
@@ -48,9 +49,21 @@ func main() {
 		list[issue.Close.Year()][int(issue.Close.Month())] = append(list[issue.Close.Year()][int(issue.Close.Month())], issue)
 	}
 
-	for key, months := range list {
-		for month, issues := range months {
-			fmt.Printf("%d,%d,%d\n", key,month,len(issues))
+	if !*due {
+		for key, months := range list {
+			for month, issues := range months {
+				fmt.Printf("%d,%d,%d\n", key, month, len(issues))
+			}
+		}
+	} else {
+		for key, months := range list {
+			for month, issues := range months {
+				for _, issue := range issues {
+					duration := issue.Close.Sub(issue.Create)
+					day := duration.Hours() / 24
+					fmt.Printf("%d,%d,%s,%s,%d\n", key, month, issue.Title, issue.URL, int(day))
+				}
+			}
 		}
 	}
 }
